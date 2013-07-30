@@ -1,0 +1,1 @@
+将HighCharts需要改变的参数封装成JavaBean，便于操作，省去在jsp里面进行js代码操作。增加通配性！组件化
