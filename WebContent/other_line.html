@@ -1,0 +1,196 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Highcharts Example</title>
+ 		<style>
+ 			div{
+ 				display:inline-block;
+ 			}
+ 		</style>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script type="text/javascript">
+	$(function () {
+		/*
+        $('#container1').highcharts({
+            chart: {
+                type: 'line',
+                width: 600,
+	            height: 400
+            },
+            title: {
+                text: 'Monthly Average Temperature'
+            },
+            subtitle: {
+                text: 'Source: WorldClimate.com'
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: 'Temperature (°C)'
+                }
+            },
+            tooltip: {
+                enabled: false,
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                        this.x +': '+ this.y +'°C';
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: 'Tokyo',
+                data: [7.0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            }, {
+                name: 'London',
+                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            }]
+        });
+		*/
+    });
+    
+	function getOptions(){
+		  $.ajax({
+	         url:'generate'
+	         ,type:'GET'
+	         ,success:function(data){ 
+	        	data = eval('(' + data + ')');
+
+	        	//commitChange(data.categoriesData,data.seriesData,data.options,'container1');
+	        	var number = $("#number").val();
+	        	
+	        	//clear container
+	        	$("#container").empty();
+	        	
+	        	//chart self-adjustment
+	        	var width = data.options.width;
+	        	if(number>=3){
+	        		width = 400;
+	        	}else{
+	        		width = 1200/number;
+	        	}
+	        	data.options.width = width;
+	        	
+	        	for(var i=1;i<=number;i++){
+	        		var name = "container"+i;
+	        		$("#container").append("<div id='"+name+"' style='margin: 0 auto;' ></div>");
+	        		commitChange(data.categoriesData,data.seriesData,data.options,name);
+	        	}
+	        	
+	        	$("rect").click(changeSize);
+	         }
+		  });
+	}
+	
+	function changeSize(){
+		//window.alert("success!");
+	}
+	
+	function commitChange(categoriesData,seriesData,options,name){
+		 $("#"+name).highcharts({
+	            chart: {
+	                type: options.type,
+	                width: options.width,
+		            height: options.height,
+		            zoomType: 'xy'
+	            },
+	            title: {
+	                text: options.title_text
+	            },
+	            subtitle: {
+	                text: options.subtitle_text
+	            },
+	            xAxis: {
+	                categories: categoriesData
+	            },
+	            yAxis: {
+	                title: {
+	                    text: options.y_axis_text
+	                }
+	            },
+	            tooltip: {
+	                enabled: false,
+	                formatter: function() {
+	                    return '<b>'+ this.series.name +'</b><br/>'+
+	                        this.x +': '+ this.y +'°C';
+	                }
+	            },
+	            plotOptions: {
+	                line: {
+	                    dataLabels: {
+	                        enabled: true
+	                    },
+	                    enableMouseTracking: false
+	                }
+	            },
+	            series: seriesData
+	        });
+		/*
+		 $('#vince').highcharts({
+           chart: {
+               type: options.type,
+               marginRight: options.marginRight,
+               marginBottom: options.marginBottom,
+               width: options.width,
+	            height: options.height
+           },
+           title: {
+               text: options.title_text,//'Hydra Monthly Defects',
+               x: -20 //center
+           },
+           subtitle: {
+               text: options.subtitle_text,//'Edit by Vince',
+               x: -20
+           },
+           xAxis: {
+               categories: categoriesData
+           },
+           yAxis: {	//Y轴的数据
+               title: {
+                   text: options.y_axis_text
+               },
+               plotLines: [{
+                   value: 0,
+                   width: 1,
+                   color: '#808080'
+               }]
+           },
+           tooltip: {
+               valueSuffix: options.tooltip_suffix
+           },
+           legend: {
+               layout: options.legend_layout,
+               align: options.legend_align,
+               verticalAlign: options.legend_verticalAlign,
+               x: -10,
+               y: 100,
+               borderWidth: 0
+           },
+           series: seriesData
+       });
+		*/
+	}
+ 
+		</script>
+	</head>
+	<body>
+<script src="js/highcharts.js"></script>
+<script src="js/modules/exporting.js"></script>
+<div id="container">
+
+</div>
+<br/>
+ <label>输入生成图表的个数：</label><input id="number" ><br/>
+ <input type="button" value="出来吧小伙伴们" onclick="getOptions()">
+</body>
+</html>
+

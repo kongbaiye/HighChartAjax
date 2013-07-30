@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Vince's Highchart</title>
+		<style type="text/css">
+			div{
+				display: inline-block;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="vince" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+		<div id="vince2" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+		<br/>
+		<input type="button" value="changeDataFromFront" onclick="changeData()">
+		<input type="button" value="changePropsFromBackEnd" onclick="getOptions()">
+	
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+		<script src="js/highcharts.js"></script>
+		<script src="js/modules/exporting.js"></script>
+		<script type="text/javascript">
+		$(function () {
+
+			//Get Data
+			var seriesData = [{
+	                name: 'Hydra PSR',
+	                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6,1]
+	            }, {
+	                name: 'Hydra Enhancement',
+	                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+	            }, {
+	                name: 'Hydra Automation Test',
+	                data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+	            }, {
+	                name: 'Hydra Knowledge Base',
+	                data: [{y:13.9,color:"#000000"}, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+	            }];
+
+
+	        var categoriesData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+	                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Dawn'];
+
+	        var options = {'width':1200,'height':400,'legend_verticalAlign':'top','tooltip_suffix':'','subtitle_text':'Subtitle','marginBottom':'25','legend_align':'right','marginRight':'130','legend_layout':'vertical','title_text':'Hydra Monthly Defect','y_axis_text':'Defects Number','type':'line'};
+	            
+	        commitChange(categoriesData,seriesData,options);
+	    });
+
+		function getOptions(){
+			  $.ajax({
+		         url:'generate'
+		         ,type:'GET'
+		         ,success:function(data){ 
+		        	data = eval('(' + data + ')');
+
+		        	commitChange(data.categoriesData,data.seriesData,data.options)
+		         }
+			  });
+		}
+		
+		function changeData(){
+
+			//Get Data
+			var seriesData = [{
+	                name: 'Hydra PSR',
+	                data: [17.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6,1]
+	            }, {
+	                name: 'Hydra Enhancement',
+	                data: [-0.2, 10.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
+	            }, {
+	                name: 'Hydra Automation Test',
+	                data: [-0.9, 0.6, 3.5, 8.4, 113.5, 117.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
+	            }, {
+	                name: 'Hydra Knowledge Base',
+	                data: [3.9, 4.2, 5.7, 18.5, 11.9, 15.2, 117.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+	            }];
+
+	        var categoriesData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+	                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec','Dawn'];
+
+	        var options = {'width':1200,'height':400,'legend_verticalAlign':'top','tooltip_suffix':'','subtitle_text':'Subtitle','marginBottom':'25','legend_align':'right','marginRight':'130','legend_layout':'vertical','title_text':'Hydra Monthly Defect','y_axis_text':'Defects Number','type':'line'};
+	           
+	        commitChange(categoriesData,seriesData,options);
+
+		}
+
+		function commitChange(categoriesData,seriesData,options){
+			 $('#vince').highcharts({
+	            chart: {
+	                type: options.type,
+	                marginRight: options.marginRight,
+	                marginBottom: options.marginBottom,
+	                width: options.width,
+		            height: options.height
+	            },
+	            title: {
+	                text: options.title_text,//'Hydra Monthly Defects',
+	                x: -20 //center
+	            },
+	            subtitle: {
+	                text: options.subtitle_text,//'Edit by Vince',
+	                x: -20
+	            },
+	            xAxis: {
+	                categories: categoriesData
+	            },
+	            yAxis: {	//Y轴的数据
+	                title: {
+	                    text: options.y_axis_text
+	                },
+	                plotLines: [{
+	                    value: 0,
+	                    width: 1,
+	                    color: '#808080'
+	                }]
+	            },
+	            tooltip: {
+	                valueSuffix: options.tooltip_suffix
+	            },
+	            legend: {
+	                layout: options.legend_layout,
+	                align: options.legend_align,
+	                verticalAlign: options.legend_verticalAlign,
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            series: seriesData
+	        });
+			 
+			 $('#vince2').highcharts({
+		            chart: {
+		                type: options.type,
+		                marginRight: options.marginRight,
+		                marginBottom: options.marginBottom,
+		                width: options.width,
+			            height: options.height
+		            },
+		            title: {
+		                text: options.title_text,//'Hydra Monthly Defects',
+		                x: -20 //center
+		            },
+		            subtitle: {
+		                text: options.subtitle_text,//'Edit by Vince',
+		                x: -20
+		            },
+		            xAxis: {
+		                categories: categoriesData
+		            },
+		            yAxis: {	//Y轴的数据
+		                title: {
+		                    text: options.y_axis_text
+		                },
+		                plotLines: [{
+		                    value: 0,
+		                    width: 1,
+		                    color: '#808080'
+		                }]
+		            },
+		            tooltip: {
+		                valueSuffix: options.tooltip_suffix
+		            },
+		            legend: {
+		                layout: options.legend_layout,
+		                align: options.legend_align,
+		                verticalAlign: options.legend_verticalAlign,
+		                x: -10,
+		                y: 100,
+		                borderWidth: 0
+		            },
+		            series: seriesData
+		        });
+		}
+		</script>
+	</body>
+</html>
